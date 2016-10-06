@@ -9,11 +9,11 @@ module.exports = function (RED) {
         this.method = n.method;
         this.payload = n.payload;
         this.headers = n.headers;
-        this.wsdlOptions = n.wsdlOptions || {};
+        this.wsdlOptions = n.wsdlOptions;
         var node = this;
         try {
             node.on('input', function (msg) {
-                soap.createClient(node.server.wsdl, wsdlOptions, function (err, client) {
+                soap.createClient(node.server.wsdl, msg.wsdlOptions || {}, function (err, client) {
                     if (err) {
                         node.status({fill: "red", shape: "dot", text: "WSDL Config Error: " + err});
                         node.error("WSDL Config Error: " + err);
