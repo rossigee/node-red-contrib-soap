@@ -35,8 +35,8 @@ module.exports = function (RED) {
                     }
                     node.status({fill: "green", shape: "dot", text: "SOAP Request..."});
                     if (msg.headers){
-						client.addSoapHeader(msg.headers);
-					}
+                        client.addSoapHeader(msg.headers);
+                    }
                     client[node.method](msg.payload, function (err, result) {
                         if (err) {
                             node.status({fill: "red", shape: "dot", text: "Service Call Error: " + err});
@@ -44,7 +44,8 @@ module.exports = function (RED) {
                             return;
                         }
                         node.status({});
-                        node.send({payload: result});
+                        msg.payload = result;
+                        node.send(msg);
                     });
                 });
             });
