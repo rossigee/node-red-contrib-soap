@@ -5,7 +5,11 @@ module.exports = function (RED) {
         this.topic = n.topic;
         this.name = n.name;
         this.wsdl = n.wsdl;
-        this.server = RED.nodes.getNode(this.wsdl);
+        if (n.wsdlUrl){
+            this.server = {wsdl:n.wsdlUrl, auth: 0};
+        } else {
+            this.server = RED.nodes.getNode(this.wsdl);
+        }
         this.method = n.method;
         this.payload = n.payload;
         this.headers = n.headers;
