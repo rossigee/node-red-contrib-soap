@@ -11,8 +11,8 @@ module.exports = function (RED) {
         try {
             node.on('input', function (msg) {
                 var server = node.server;
-                if (node.wsdlUrl){
-                    server = {wsdl:node.wsdlUrl, auth: 0};
+                if (msg.wsdlUrl){
+                    server = {wsdl: msg.wsdlUrl, auth: 0};
                 }
                 soap.createClient(server.wsdl, msg.wsdlOptions || {}, function (err, client) {
                     if (err) {
