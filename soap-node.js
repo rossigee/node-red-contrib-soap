@@ -5,36 +5,33 @@ module.exports = function (RED) {
         this.topic = n.topic;
         this.name = n.name;
         this.wsdl = n.wsdl;
-        if (n.wsdlUrl){
-            this.server = {wsdl:n.wsdlUrl, auth: 0};
-        } else {
-            this.server = RED.nodes.getNode(this.wsdl);
-        }
+        this.server = RED.nodes.getNode(this.wsdl);
         this.method = n.method;
-        this.payload = n.payload;
-        this.headers = n.headers;
-        this.wsdlOptions = n.wsdlOptions;
         var node = this;
         try {
             node.on('input', function (msg) {
-                soap.createClient(node.server.wsdl, msg.wsdlOptions || {}, function (err, client) {
+                var server = node.server;
+                if (node.wsdlUrl){
+                    server = {wsdl:node.wsdlUrl, auth: 0};
+                }
+                soap.createClient(server.wsdl, msg.wsdlOptions || {}, function (err, client) {
                     if (err) {
                         node.status({fill: "red", shape: "dot", text: "WSDL Config Error: " + err});
                         node.error("WSDL Config Error: " + err);
                         return;
                     }
-                    switch (node.server.auth) {
+                    switch (server.auth) {
                         case '1':
-                            client.setSecurity(new soap.BasicAuthSecurity(node.server.user, node.server.pass));
+                            client.setSecurity(new soap.BasicAuthSecurity(server.user, server.pass));
                             break;
                         case '2':
-                            client.setSecurity(new soap.ClientSSLSecurity(node.server.key, node.server.cert, {}));
+                            client.setSecurity(new soap.ClientSSLSecurity(server.key, server.cert, {}));
                             break;
                         case '3':
-                            client.setSecurity(new soap.WSSecurity(node.server.user, node.server.pass));
+                            client.setSecurity(new soap.WSSecurity(server.user, server.pass));
                             break;
                         case '4':
-                            client.setSecurity(new soap.BearerSecurity(node.server.token));
+                            client.setSecurity(new soap.BearerSecurity(server.token));
                             break;
                     }
                     node.status({fill: "green", shape: "dot", text: "SOAP Request..."});
