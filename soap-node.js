@@ -18,9 +18,9 @@ module.exports = function (RED) {
                     if (err) {
                         node.status({fill: "red", shape: "dot", text: "WSDL Config Error: " + err});
                         node.error("WSDL Config Error: " + err);
-						msg.payload = "Soap Module WSDL config error : " + err;
-						node.send(msg);
-						return;
+                        msg.payload = "Soap Module WSDL config error : " + err;
+                        node.send(msg);
+                        return;
                     }
                     switch (server.auth) {
                         case '1':
@@ -44,8 +44,8 @@ module.exports = function (RED) {
                         if (err) {
                             node.status({fill: "red", shape: "dot", text: "Service Call Error: " + err});
                             node.error("Service Call Error: " + err);
-							msg.payload = "Soap Module Service call error : " + err;
-							node.send(msg);
+                            msg.payload = "Soap Module Service call error : " + err;
+                            node.send(msg);
                             return;
                         }
                         node.status({});
